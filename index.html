@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<htm lang="pt-br">
+<head>
+    <title> Mini Projeto SVG </title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="main">
+    <hr class="LinhaInicio"> 
+    <label class="tituloInicio"> Mini Projeto - Banco de Dados II </label>
+    <div class="card"> 
+        <div class="imgUNDRAW">
+        </div>
+        <h2>Informe o nome do município:</h2>
+        <div>
+            <input type="text" id="municipio" >
+        </div> 
+            <button onclick="buscarSVG()">  Buscar  </button>
+    </div>
+    <svg id="svg">
+        <path id="path"></path>
+    </svg>
+    </div>
+
+    <script>
+
+        function buscarSVG(){
+    
+            const municipio = document.getElementById('municipio').value;
+    
+            const requestPolygonCity = new Request(`http://localhost:3000/getSvg/${municipio}`);
+            const requestViewBoxCity = new Request(`http://localhost:3000/getViewBox/${municipio}`);
+    
+    
+            fetch(requestPolygonCity)
+                .then(response => {
+                    return response.json();     
+            }).then(response => {
+                document.getElementById('path').setAttribute('d', response[0].st_assvg)
+            })
+    
+            fetch(requestViewBoxCity)
+            .then(response => {
+                return response.json();
+            }).then(response =>{
+                document.getElementById('svg').setAttribute('viewBox', response[0].getviewbox);
+            })
+    
+            }
+            
+        </script>
+</body>
+</htm>
